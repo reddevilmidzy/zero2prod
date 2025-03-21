@@ -5,11 +5,16 @@ async fn greet(req: HttpRequest) -> impl Responder {
     format!("Hello {}!", &name)
 }
 
+async fn health_check() -> impl Responder {
+    HttpResponse::Ok()
+}
+
 #[tokio::main]
 async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
         App::new()
             .route("/", web::get().to(greet))
+            .route("/health_check", web::get().to(health_check))
             .route("/{name}", web::get().to(greet))
     })
     .bind("127.0.0.1:8080")?
