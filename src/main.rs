@@ -1,6 +1,8 @@
+use std::net::TcpListener;
 use zero2prod::run;
 
 #[tokio::main]
 async fn main() -> std::io::Result<()> {
-    run()?.await
+    let listener = TcpListener::bind("localhost:8080").expect("Failed to bind port");
+    run(listener)?.await
 }
