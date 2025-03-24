@@ -27,4 +27,10 @@ async fn subscribe(_form: web::Form<FormData>) -> HttpResponse {
 * 바디를 역직렬화하고 URL 인코딩 규칙에 따라 FormData로 만듦. 이때 serde_urlencoded와 FormData의 Deserialize 구현을 활용. (#[derive(serde:Deserialize)]에 의해 자동 생성)
 * from_request가 실패하면, 400 BAD Request가 호출자에게 반환된다. 성공하면 subscribe가 호출되고 200 Ok를 반환.
 
+
+### 도서 글귀
+
+* 영속성 요규가 명확하지 않다면, 관게형 데이터베이스를 사용하자. 큰 확장을 예상할 필요가 없다면, PostgreSQL을 사용하자.
+* 스레드는 병렬로 동작한다. 비동기는 병렬로 대기한다. 
+
 [깃허브 저장소](https://github.com/LukeMathWalker/zero-to-production)
