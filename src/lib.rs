@@ -1,14 +1,24 @@
 use actix_web::dev::Server;
-use actix_web::{App, HttpRequest, HttpResponse, HttpServer, Responder, web};
+use actix_web::{App, HttpRequest, HttpResponse, HttpServer, web};
 use std::net::TcpListener;
 
-async fn greet(req: HttpRequest) -> impl Responder {
+async fn greet(req: HttpRequest) -> HttpResponse {
     let name = req.match_info().get("name").unwrap_or("World");
-    format!("Hello {}!", &name)
+    HttpResponse::Ok().body(format!("Hello {}!", &name))
 }
 
-async fn health_check() -> impl Responder {
-    HttpResponse::Ok()
+async fn health_check() -> HttpResponse {
+    HttpResponse::Ok().finish()
+}
+
+#[derive(serde::Deserialize)]
+struct FormData {
+    email: String,
+    name: String,
+}
+
+async fn subscribe(_form: web::Form<FormData>) -> HttpResponse {
+    HttpResponse::Ok().finish()
 }
 
 pub fn run(listener: TcpListener) -> Result<Server, std::io::Error> {
@@ -17,6 +27,7 @@ pub fn run(listener: TcpListener) -> Result<Server, std::io::Error> {
             .route("/", web::get().to(greet))
             .route("/health_check", web::get().to(health_check))
             .route("/{name}", web::get().to(greet))
+            .route("/subscriptions", web::post().to(subscribe))
     })
     .listen(listener)?
     .run();
