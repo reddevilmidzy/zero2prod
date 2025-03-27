@@ -33,4 +33,9 @@ async fn subscribe(_form: web::Form<FormData>) -> HttpResponse {
 * 영속성 요규가 명확하지 않다면, 관게형 데이터베이스를 사용하자. 큰 확장을 예상할 필요가 없다면, PostgreSQL을 사용하자.
 * 스레드는 병렬로 동작한다. 비동기는 병렬로 대기한다. 
 
+### 학습 키워드 
+
+* Arc: connection을 Arc에 담아서 넘겼다. 
+
+
 [깃허브 저장소](https://github.com/LukeMathWalker/zero-to-production)

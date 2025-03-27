@@ -1,15 +1,19 @@
 use crate::routes::{greet, health_check, subscribe};
 use actix_web::dev::Server;
 use actix_web::{App, HttpServer, web};
+use sqlx::PgConnection;
 use std::net::TcpListener;
 
-pub fn run(listener: TcpListener) -> Result<Server, std::io::Error> {
-    let server = HttpServer::new(|| {
+pub fn run(listener: TcpListener, connection: PgConnection) -> Result<Server, std::io::Error> {
+    let connection = web::Data::new(connection);
+    // 요기 move는 뭐지
+    let server = HttpServer::new(move || {
         App::new()
             .route("/", web::get().to(greet))
             .route("/health_check", web::get().to(health_check))
             .route("/{name}", web::get().to(greet))
             .route("/subscriptions", web::post().to(subscribe))
+            .app_data(connection.clone())
     })
     .listen(listener)?
     .run();
