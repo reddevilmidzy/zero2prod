@@ -71,7 +71,7 @@ fn spawn_app() -> String {
 
     // OS가 할당한 포트 추출
     let port = listener.local_addr().unwrap().port();
-    let server = zero2prod::run(listener).expect("Failed to bind address");
+    let server = zero2prod::startup::run(listener).expect("Failed to bind address");
     // 서버를 백그라운드로 구동
     // torio::spawn은 생성된 퓨처에 대한 핸들을 반환한다.
     // 하지만 여기에서는 사용하지 않으므로 바인딩하진 않음
