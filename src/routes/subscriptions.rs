@@ -21,7 +21,7 @@ pub async fn subscribe(form: web::Form<FormData>, pool: web::Data<PgPool>) -> Ht
     // async 함수에서 'enter'를 사용하면 고대로 패닉이...?
     let _request_span_guard = request_span.enter();
 
-    let query_span = tracing::info_span!("Saving new subscriber details in the database",);
+    let _query_span = tracing::info_span!("Saving new subscriber details in the database",);
 
     match sqlx::query!(
         r#"
