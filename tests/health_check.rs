@@ -1,14 +1,22 @@
+use once_cell::sync::Lazy;
 use sqlx::{Connection, Executor, PgConnection, PgPool};
 use startup::run;
 use std::net::TcpListener;
 use uuid::Uuid;
 use zero2prod::configuration::{DatabaseSettings, get_configurations};
 use zero2prod::startup;
+use zero2prod::telemetry::{get_subscriber, init_subscriber};
 
 pub struct TestApp {
     pub address: String,
     pub db_pool: PgPool,
 }
+
+// `once_cell`을 사용해서 `tracing` 스택이 한 번만 초기화되는 것을 보장한다.
+static TRACING: Lazy<()> = Lazy::new(|| {
+    let subscriber = get_subscriber("test".into(), "debug".into());
+    init_subscriber(subscriber);
+});
 
 #[tokio::test]
 async fn health_check() {
@@ -89,6 +97,12 @@ async fn subscribe_returns_a_400_when_data_is_missing() {
 
 // 비동기 함수
 async fn spawn_app() -> TestApp {
+
+    // `initialize`가 첫 번째 호출되면 `TRACING` 안의 코드가 실행
+    // 이후 실행은 건너뜀
+    // 약간 싱글턴 느낌쓰
+    Lazy::force(&TRACING);
+
     let listener = TcpListener::bind("127.0.0.1:0").expect("Failed to bind random port");
 
     // OS가 할당한 포트 추출
