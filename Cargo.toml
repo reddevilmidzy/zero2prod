@@ -25,6 +25,7 @@ sqlx = { version = "0.8", default-features = false, features = [
 ] }
 uuid = { version = "1", features = ["v4"] }
 chrono = { version = "0.4.22", default-features = false, features = ["clock"] }
+secrecy = { version = "0.8", features = ["serde"] }
 tracing = { version = "0.1", features = ["log"] }
 tracing-bunyan-formatter = "0.3"
 tracing-log = "0.2"
