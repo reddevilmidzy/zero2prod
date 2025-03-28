@@ -14,8 +14,16 @@ pub struct TestApp {
 
 // `once_cell`을 사용해서 `tracing` 스택이 한 번만 초기화되는 것을 보장한다.
 static TRACING: Lazy<()> = Lazy::new(|| {
-    let subscriber = get_subscriber("test".into(), "debug".into());
-    init_subscriber(subscriber);
+    let default_filter_level = "info".to_string();
+    let subscriber_name = "test".to_string();
+
+    if std::env::var("TEST_LOG").is_ok() {
+        let subscriber = get_subscriber(subscriber_name, default_filter_level, std::io::stdout);
+        init_subscriber(subscriber);
+    } else {
+        let subscriber = get_subscriber(subscriber_name, default_filter_level, std::io::sink);
+        init_subscriber(subscriber);
+    }
 });
 
 #[tokio::test]
@@ -97,7 +105,6 @@ async fn subscribe_returns_a_400_when_data_is_missing() {
 
 // 비동기 함수
 async fn spawn_app() -> TestApp {
-
     // `initialize`가 첫 번째 호출되면 `TRACING` 안의 코드가 실행
     // 이후 실행은 건너뜀
     // 약간 싱글턴 느낌쓰
