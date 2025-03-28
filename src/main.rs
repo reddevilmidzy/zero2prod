@@ -2,12 +2,15 @@ use sqlx::PgPool;
 use std::net::TcpListener;
 use tracing::subscriber::set_global_default;
 use tracing_bunyan_formatter::{BunyanFormattingLayer, JsonStorageLayer};
-use tracing_subscriber::{EnvFilter, Registry, layer::SubscriberExt};
+use tracing_log::LogTracer;
+use tracing_subscriber::{layer::SubscriberExt, EnvFilter, Registry};
 use zero2prod::configuration::get_configurations;
 use zero2prod::startup::run;
 
 #[tokio::main]
 async fn main() -> std::io::Result<()> {
+    // 모든 `log`의 이벤트를 구독자에게 리다이렉트
+    LogTracer::init().expect("Failed to set logger");
     // RUST_LOG 환경 변수가 설정되어 있지 않으면 info 및 그 이상의 레벨의 모든 span을 출력
     let env_filter = EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("info"));
 
