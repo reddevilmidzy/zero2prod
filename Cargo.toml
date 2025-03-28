@@ -25,6 +25,8 @@ sqlx = { version = "0.8", default-features = false, features = [
 ] }
 uuid = { version = "1", features = ["v4"] }
 chrono = { version = "0.4.22", default-features = false, features = ["clock"] }
+env_logger = "0.11.7"
+log = "0.4"
 
 # Dev 디펜더시는 테스트를 실행할 때만 사용되고 최종 애플리케이션 바이너리에는 포함되지 않음.
 [dev-dependencies]
