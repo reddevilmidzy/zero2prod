@@ -35,6 +35,11 @@ sqlx는 비동기 인터페이스를 가짐. 그러나 같은 db 커넥션에 �
 PgConnection을 lock(Mutex) 뒤에 놓음으로써 기반 TCP 소켓에 대한 접속을 동기화화고, lock을 얻은 뒤 감싸인 커넥션에 대한 가변 참조자를 얻어 동작을 하게 할 수 있다. 하지만 이상적이지는 않음. 한 순간에 하나의 쿼리만 실행할 수 밖에없기 때문.  
 PgPool을 사용하면 해결 가능하다.  
 
+<br>
+
+버전 0.8에는 offline이 없는건가?  
+
+
 ### 로깅
 
 tracing이 갓갓이다.  
@@ -55,7 +60,31 @@ tracing이 갓갓이다.
 tracing-actix-web은 actix-web의 Logger를 대체하기 위해 설계되어 있으며, log가 아닌 tracing에 기반을 둠. 매 요청마다 일일이 작성해줄 필요가 없다.  
 또한 tracing-opentelemetry를 설치하면 span을 OpenTelemetry 호환 서비스([Jagger](https://www.jaegertracing.io), [Honeycomb.io](https://honeycomb.io) 등)로 보내 심층적 분석 가능
 
+### 도커
 
+#### sqlx 오프라인 모드
+바로 도커 빌드하면 오류가 발생한다. 이유는 sqlx 때문인데, sqlx는 테이블의 스키마를 고려해 모든 쿼리가 성공적으로 실행될 수 있도록 컴파일 시 데이터베이스를 호출한다. 하지만 cargo build를 도커 이미지 안에서 실행하면, sqlx는 .env 파일의 DATABASE_URL 환경 변수가 가리키는 데이터베이스와 커넥션을 만드는데 실패한다.  
+
+```shell
+cargo sqlx prepare -- --lib
+```
+
+도커 컨테이너 빌드 명령  
+
+```shell
+docker build --tag zero2prod --file Dockerfile .
+```
+
+도커 실행 명령  
+```shell
+docker run zero2prod
+```
+
+포트 노출하면서 실행  
+이게 필요한 이유는 기본적으로 도커 이미지는 기반 호스트 머신에 포트를 노출하지 않음
+```shell
+docker run -p 8080:8080 zero2prod
+```
 ### 도서 글귀
 
 * 영속성 요규가 명확하지 않다면, 관게형 데이터베이스를 사용하자. 큰 확장을 예상할 필요가 없다면, PostgreSQL을 사용하자.
