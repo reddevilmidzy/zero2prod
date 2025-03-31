@@ -100,14 +100,37 @@ curl --request POST --data 'name=redddy&email=hello@redddy.com' 127.0.0.1:8080/s
 러스트에서 docker build는 꽤 오래 걸린다. 
 
 
+**step1** 
+<br>
+
 최적화하기 전에는 7.32GB 크기의 이미지였다.  
 
 ![최적화 전 이미지 사이즈](img/img.png)
 
+[최적화 전 Dockerfile 코드](dockerfile_history/start)  
+<br>
+
+**step2**
+<br>
 
 다단계 빌드를 사용하고 이미지를 빌드하는데 필요하지 않은 파일을 제거하기 위해 .dockerignore 파일에 명시를 해주고, 다단계 빌드를 사용하여 최적화 하니 820MB로 줄었다. 
 이때 rust 버전에 -slim이 붙은 친구를 사용했는데 동일한 기반 OS를 사용하는 더 작은 이미지다. 러스트 툴체인과 용병(rustc, cargo 등)의 무게를 줄임으로써 더욱 크기를 줄일 수 있었다. 
 ![최적화 후 이미지 사이즈](img/img_1.png)
+
+[ignore 추가와 slim 사용](dockerfile_history/upgrade)
+
+<br>
+
+**step3**
+<br>
+
+여기에서 slim이 아니라 더 원시적인 OS를 사용하면 더욱 최적화가 가능하다.  
+
+![OS 변경](img/img_2.png)
+
+보면 96.6MB로 줄였다. 처음에 7.34GB 와 비교하면 굉장한 변화다.  
+
+[윈시적인 OS 사용](dockerfile_history/os)
 
 
 ### 도서 글귀
