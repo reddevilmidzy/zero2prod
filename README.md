@@ -85,6 +85,16 @@ docker run zero2prod
 ```shell
 docker run -p 8080:8080 zero2prod
 ```
+
+```shell
+curl --request POST --data 'name=redddy&email=hello@redddy.com' 127.0.0.1:8080/subscriptions --verboes
+```
+로 요청을 보내면 약 30초 정도가 지난 후 500이 돌아온다.  
+
+이유는 connect를 connect_lazy로 바꿔 db를 직접 다루는 것을 회피했기 때문이다.  
+
+
+
 ### 도서 글귀
 
 * 영속성 요규가 명확하지 않다면, 관게형 데이터베이스를 사용하자. 큰 확장을 예상할 필요가 없다면, PostgreSQL을 사용하자.
