@@ -133,6 +133,17 @@ curl --request POST --data 'name=redddy&email=hello@redddy.com' 127.0.0.1:8080/s
 [윈시적인 OS 사용](dockerfile_history/os)
 
 
+
+<br>
+
+## 보안 제약 사항
+
+우리가 대비해야 하는 것
+* 도스 공격(denial-of-service attack, Dos attack): 서비스를 다운시켜 다른 사람들이 회원가입을 하지 못하게 한다. 모든 온라인 서비스의 공통적 위협
+* 데이터 갈취(data theft): 거대한 이메일 주소 목록을 훔친다. 
+* 피싱(phishing): 우리 서비스를 사용해서 합법적으로 보이는 이메일을 피해자에게 보내, 그들로 하여금 어떤 링크를 클릭하거나 다른 행동을 수행하게 속인다. 
+
+
 ### 도서 글귀
 
 * 영속성 요규가 명확하지 않다면, 관게형 데이터베이스를 사용하자. 큰 확장을 예상할 필요가 없다면, PostgreSQL을 사용하자.
