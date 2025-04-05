@@ -104,7 +104,6 @@ async fn subscribe_returns_a_400_when_data_is_missing() {
 }
 
 #[tokio::test]
-#[should_panic]
 async fn subscribe_returns_a_400_when_fields_are_present_but_invalid() {
     // Arrange
     let app = spawn_app().await;
@@ -125,6 +124,7 @@ async fn subscribe_returns_a_400_when_fields_are_present_but_invalid() {
             .await
             .expect("Failed to execute request.");
 
+        dbg!(&response);
         // Assert
         assert_eq!(
             400,
