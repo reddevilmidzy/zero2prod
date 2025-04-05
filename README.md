@@ -153,6 +153,7 @@ curl --request POST --data 'name=redddy&email=hello@redddy.com' 127.0.0.1:8080/s
 ### 학습 키워드 
 
 * Arc: connection을 Arc에 담아서 넘겼다. 
+* TryInfo: .try_into()와 try_from()을 적재적소에 사용하자.
 
 
 [깃허브 저장소](https://github.com/LukeMathWalker/zero-to-production)
