@@ -144,6 +144,19 @@ curl --request POST --data 'name=redddy&email=hello@redddy.com' 127.0.0.1:8080/s
 * 피싱(phishing): 우리 서비스를 사용해서 합법적으로 보이는 이메일을 피해자에게 보내, 그들로 하여금 어떤 링크를 클릭하거나 다른 행동을 수행하게 속인다. 
 
 
+## 이메일 검증
+
+* email과 name에 대한 도메인 검증
+* email 사용자의 확인
+  * 인증 메일 보낸 후 확인
+
+### 확인 이메일
+
+* 이메일을 전송하는 모듈을 작성
+* 기존의 POST /subscriptions 요청 핸들러 로직을 적용해서 새로운 명세를 매칭
+* GET /subscriptions/confirm 요청 핸들러를 새로 작성
+
+
 ### 도서 글귀
 
 * 영속성 요규가 명확하지 않다면, 관게형 데이터베이스를 사용하자. 큰 확장을 예상할 필요가 없다면, PostgreSQL을 사용하자.
