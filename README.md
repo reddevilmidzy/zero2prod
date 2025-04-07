@@ -156,6 +156,37 @@ curl --request POST --data 'name=redddy&email=hello@redddy.com' 127.0.0.1:8080/s
 * 기존의 POST /subscriptions 요청 핸들러 로직을 적용해서 새로운 명세를 매칭
 * GET /subscriptions/confirm 요청 핸들러를 새로 작성
 
+#### Arc
+
+```rust
+pub fn run(
+  listener: TcpListener,
+  db_pool: PgPool,
+  email_client: EmailClient,
+) -> Result<Server, std::io::Error> {
+  let db_pool = Data::new(db_pool);
+  // actix_web::web::data(Arc 포인터)로 EmailClient를 감싸고 App을 만들어야 할 때마다 포인터를 app_data로 보낸다. 
+  // 아래 부분 없이도 동작은 가능하다. 그럼 어떤게 최선일까
+  // EmailClient가 단순히 Client 인스턴스를 감싼 래퍼라면, 굳이 Arc를 사용해서 커넥션 풀을 두 번 감쌀 필요가 없다. 
+  // 그러나 현재 EmailClient는 base_url과 sender 이렇게 두 개의 필드를 가지고 있다. Arc를 사용하지 않으면 App 인스턴스가 생성될 때마다 
+  // 해당 데이터의 사본을 새로운 메모리에 할당한다. 한편 Arc로 감싼 경우 모든 인스턴스가 이걸 공유한다. 
+  // 하지만 기억해야 할 건 스레드마다 App 인스턴스를 만든다는 것이다. 
+  let email_client = Data::new(email_client); // 이부분을 주석하는 것이 Arc를 사용하지 않는것. 
+  let server = HttpServer::new(move || {
+    App::new()
+            .wrap(TracingLogger::default())
+            .route("/", web::get().to(greet))
+            .route("/health_check", web::get().to(health_check))
+            .route("/{name}", web::get().to(greet))
+            .route("/subscriptions", web::post().to(subscribe))
+            .app_data(db_pool.clone())
+            .app_data(email_client.clone())
+  })
+          .listen(listener)?
+          .run();
+  Ok(server)
+}
+```
 
 ### 도서 글귀
 
