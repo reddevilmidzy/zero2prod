@@ -19,10 +19,13 @@ async fn main() -> std::io::Result<()> {
         .email_client
         .sender()
         .expect("Failed to connect to email server");
+    let timeout = configuration.email_client.timeout();
+
     let email_client = EmailClient::new(
         configuration.email_client.base_url,
         sender_email,
         configuration.email_client.authorization_token,
+        timeout,
     );
 
     let addr = format!(
