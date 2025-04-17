@@ -1,4 +1,3 @@
--- Add migration script here
 -- subscriptions 테이블 생성
 -- set DATABASE_URL=postgres://postgres:password@127.0.0.1:5432/newsletter
 -- 위 명령어로 주소 설정하고
