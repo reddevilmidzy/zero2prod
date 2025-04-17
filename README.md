@@ -192,6 +192,17 @@ pub fn run(
 * I/O 동작을 수행할 때는 항상 타임아웃을 설정하도록 하자. 
 
 
+### 버그 
+
+apply fix 가 이상하게 동작한다.
+Debug가 없어 컴파일에러가 발생하는 상황에서 `#[derive(Debug)]`를 추가하라고 apply fix 가 떴지만 이상한 곳을 라우팅하고 있다.  
+rust-lang 버그인지 tracing 버그인지는 잘모르겠는데 시간날 때 알아보자. 
+
+![img](img/img_3.png)
+
+`email_client`에 가서 변경해야 하는데 엉뚱한 데 use 하는데 가있다. 
+![img](img/img_4.png)
+
 ### 도서 글귀
 
 * 영속성 요규가 명확하지 않다면, 관게형 데이터베이스를 사용하자. 큰 확장을 예상할 필요가 없다면, PostgreSQL을 사용하자.
