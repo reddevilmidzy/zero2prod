@@ -4,7 +4,7 @@ use crate::startup::ApplicationBaseUrl;
 use actix_web::{web, HttpResponse};
 use chrono::Utc;
 use rand::distr::Alphanumeric;
-use rand::{thread_rng, Rng};
+use rand::{rng, Rng};
 use sqlx::PgPool;
 use uuid::Uuid;
 
@@ -156,7 +156,7 @@ pub async fn insert_subscriber(
 }
 
 fn generate_subscription_token() -> String {
-    let mut rng = thread_rng();
+    let mut rng = rng();
     std::iter::repeat_with(|| rng.sample(Alphanumeric))
         .map(char::from)
         .take(25)
