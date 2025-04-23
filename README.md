@@ -213,6 +213,15 @@ rust-lang 버그인지 tracing 버그인지는 잘모르겠는데 시간날 때 
 
 * Arc: connection을 Arc에 담아서 넘겼다. 
 * TryInfo: .try_into()와 try_from()을 적재적소에 사용하자.
+* [AsyncDrop을 지원하지 않는 이유](https://github.com/rust-lang/rfcs/pull/2958)
+* 트랜잭션 begin 하고 commit, rollback 둘 중 하나라도 하지 않으면 에러 발생.
 
+
+### TODO LIST
+
+* 사용자가 구독을 두 번 한다면? 두 번의 확인 이메일을 받는 것을 보장하자.
+* 사용자가 확인 링크를 두 번 클릭하면 어떻게 되나
+* 구독 토큰의 형태는 적절하지만 토큰이 실제로는 존재하지 않는다면,
+* 유입되는 토큰에 대해 검증하기, 현재 사용자의 입력을 그대로 쿼리에 전달하고 있다. (다행이도 sqlx에서 sql 인젝션을 방지해준다.)
 
 [깃허브 저장소](https://github.com/LukeMathWalker/zero-to-production)
