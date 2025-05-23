@@ -8,6 +8,7 @@ use anyhow::{Context, Error};
 use secrecy::ExposeSecret;
 use secrecy::Secret;
 use sqlx::PgPool;
+use sha3::Digest;
 
 #[tracing::instrument(
     name = "Publish a newsletter issue",
@@ -146,14 +147,19 @@ async fn validate_credentials(
     credentials: Credentials,
     pool: &PgPool,
 ) -> Result<uuid::Uuid, PublishError> {
+    let password_hash = sha3::Sha3_256::digest(
+        credentials.password.expose_secret().as_bytes(),
+    );
+    // 소문자 16진수 인코딩
+    let password_hash = format!("{:x}", password_hash);
     let user_id: Option<_> = sqlx::query!(
         r#"
         SELECT user_id
         FROM users
-        WHERE username = $1 AND password = $2
+        WHERE username = $1 AND password_hash = $2
         "#,
         credentials.username,
-        credentials.password.expose_secret()
+        password_hash
     )
     .fetch_optional(pool)
     .await
