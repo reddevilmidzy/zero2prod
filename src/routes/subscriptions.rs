@@ -5,8 +5,8 @@ use actix_web::http::StatusCode;
 use actix_web::{HttpResponse, ResponseError, web};
 use anyhow::Context;
 use chrono::Utc;
-use rand::distr::Alphanumeric;
-use rand::{Rng, rng};
+use rand::Rng;
+use rand::distributions::Alphanumeric;
 use sqlx::{PgPool, Postgres, Transaction};
 use std::fmt::{Display, Formatter};
 use uuid::Uuid;
@@ -221,7 +221,7 @@ pub async fn insert_subscriber(
 }
 
 fn generate_subscription_token() -> String {
-    let mut rng = rng();
+    let mut rng = rand::thread_rng();
     std::iter::repeat_with(|| rng.sample(Alphanumeric))
         .map(char::from)
         .take(25)
