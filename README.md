@@ -389,6 +389,20 @@ non_existing_user_is_rejected()와 invalid_password_is_rejected() 테스트의 �
 코드를 수정하여 정적으로 확연한 타이밍이 발생하지 않도록 하였다.
 
 
+### xss
+
+사이트 간 스크립팅(cross-site scripting) 공격은 공격자가 신뢰할 수 없는 소스(사용자 입력, 쿼리 파라미터 등)로부터 만들어진 동적 콘텐츠를 악용함으로써
+신뢰할 수 있는 웹 사이트에 HTML 조각이나 자바스크립트 스니펫을 주입한다. OWASP는 XSS 공격을 방지하는 방법에 관한 전체적인 치트 시트(https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)를 제공한다.
+OWASP 가이드라인에 따르면 신뢰할 수 없는 입력을 HTML 엔티티로 인코딩해야 한다.
+
+* `&` -> `&amp;`
+* `<` -> `&lt;`
+* `>` -> `&gt;`
+* `"` -> `&quot;`
+* `'` -> `&#x27;`
+* `/` -> `&#x2F;`
+
+
 ### 도서 글귀
 
 * 영속성 요규가 명확하지 않다면, 관게형 데이터베이스를 사용하자. 큰 확장을 예상할 필요가 없다면, PostgreSQL을 사용하자.
