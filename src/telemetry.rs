@@ -1,3 +1,4 @@
+use tokio::task::JoinHandle;
 use tracing::Subscriber;
 use tracing::subscriber::set_global_default;
 use tracing_bunyan_formatter::{BunyanFormattingLayer, JsonStorageLayer};
@@ -34,4 +35,16 @@ pub fn init_subscriber(subscriber: impl Subscriber + Send + Sync) {
     LogTracer::init().expect("Failed to set logger");
     // 어떤 subscriber를 사용해야 하는지 지정할 수 있음
     set_global_default(subscriber).expect("Failed to set subscriber");
+}
+
+pub fn spawn_blocking_with_tracing<F, R>(f: F) -> JoinHandle<R>
+where
+    F: FnOnce() -> R + Send + 'static,
+    R: Send + 'static,
+{
+    // 이것이 실행된 뒤 새로운 스레드를 실행
+    let current_span = tracing::Span::current();
+    // 그 뒤 스레드의 소유권을 클로저에 전달하고
+    // 그 스코프 안에서 명시적으로 모든 계산을 실행,
+    tokio::task::spawn_blocking(move || current_span.in_scope(f))
 }
