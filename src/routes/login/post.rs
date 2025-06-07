@@ -1,10 +1,9 @@
 use crate::authentication::{AuthError, Credentials, validate_credentials};
 use crate::routes::error_chain_fmt;
-use actix_web::cookie::Cookie;
 use actix_web::error::InternalError;
-use actix_web::http::StatusCode;
 use actix_web::http::header::LOCATION;
-use actix_web::{HttpResponse, ResponseError, web};
+use actix_web::{HttpResponse, web};
+use actix_web::cookie::Cookie;
 use secrecy::Secret;
 use sqlx::PgPool;
 
@@ -24,10 +23,10 @@ pub async fn login(
         username: form.0.username,
         password: form.0.password,
     };
-    tracing::Span::current().record("username", &tracing::field::display(&credentials.username));
+    tracing::Span::current().record("username", tracing::field::display(&credentials.username));
     match validate_credentials(credentials, &pool).await {
         Ok(user_id) => {
-            tracing::Span::current().record("user_id", &tracing::field::display(&user_id));
+            tracing::Span::current().record("user_id", tracing::field::display(&user_id));
             Ok(HttpResponse::SeeOther()
                 .insert_header((LOCATION, "/"))
                 .finish())
@@ -57,11 +56,5 @@ pub enum LoginError {
 impl std::fmt::Debug for LoginError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         error_chain_fmt(self, f)
-    }
-}
-
-impl ResponseError for LoginError {
-    fn status_code(&self) -> StatusCode {
-        StatusCode::SEE_OTHER
     }
 }
