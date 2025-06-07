@@ -25,7 +25,7 @@ sqlx = { version = "0.6", default-features = false, features = [
     "migrate",
     "offline"
 ] }
-uuid = { version = "1", features = ["v4"] }
+uuid = { version = "1", features = ["v4", "serde"] }
 chrono = { version = "0.4.22", default-features = false, features = ["clock"] }
 secrecy = { version = "0.8", features = ["serde"] }
 tracing = { version = "0.1", features = ["log"] }
