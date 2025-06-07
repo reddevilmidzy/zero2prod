@@ -41,11 +41,6 @@ rand = { version = "0.8", features = ["std_rng"] }
 thiserror = "1"
 base64 = "0.13"
 argon2 = { version = "0.4", features = ["std"] }
-urlencoding = "2"
-htmlescape = "0.3"
-hmac = { version = "0.12", features = ["std"] }
-sha2 = "0.10"
-hex = "0.4"
 
 # Dev 디펜더시는 테스트를 실행할 때만 사용되고 최종 애플리케이션 바이너리에는 포함되지 않음.
 [dev-dependencies]
