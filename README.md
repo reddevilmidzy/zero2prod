@@ -423,5 +423,12 @@ OWASP 가이드라인에 따르면 신뢰할 수 없는 입력을 HTML 엔티티
 * 사용자가 확인 링크를 두 번 클릭하면 어떻게 되나
 * 구독 토큰의 형태는 적절하지만 토큰이 실제로는 존재하지 않는다면,
 * 유입되는 토큰에 대해 검증하기, 현재 사용자의 입력을 그대로 쿼리에 전달하고 있다. (다행이도 sqlx에서 sql 인젝션을 방지해준다.)
+* 관리자 대시보드에 send a newsletter issue 링크를 추가한다.
+* GET /admin/newsletters에 새로운 이슈를 제출하는 HTML 폼을 추가한다.
+* POST /newsletter가 그 폼 데이터를 처리하게 수정한다.
+  * 경로를 POST /admin/newsletter로 변경한다.
+  * 기본 인증을 세션 기반 인증으로 마이그레이션한다.
+  * Json 추출기(application/json) 대신 Form 추출기(application/x-www-form-urlencoded)를 사용해서 요청 바디를 처리한다.
+  * 테스트 스위트를 수정한다.
 
 [깃허브 저장소](https://github.com/LukeMathWalker/zero-to-production)
